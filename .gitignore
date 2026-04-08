@@ -1,0 +1,19 @@
+.env
+.env.*
+!.env.example
+
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+.DS_Store
+*.log
+
+# Local dev uploads (if enabled later)
+uploads/
+
+# Prisma
+packages/db/prisma/dev.db
+

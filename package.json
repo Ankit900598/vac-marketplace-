@@ -1,0 +1,19 @@
+{
+  "name": "va-marketplace",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+    "install:all": "concurrently -n db,api,web \"npm --prefix packages/db install\" \"npm --prefix apps/api install\" \"npm --prefix apps/web install\"",
+    "setup": "npm install && npm run install:all && npm run db:migrate && npm run db:generate && npm --prefix packages/db exec prisma db seed",
+    "setup:clean": "taskkill /IM node.exe /F >NUL 2>NUL & npm run setup",
+    "dev": "concurrently -n api,web \"npm --prefix apps/api run dev\" \"npm --prefix apps/web run dev\"",
+    "dev:api": "npm --prefix apps/api run dev",
+    "dev:web": "npm --prefix apps/web run dev",
+    "db:generate": "npm --prefix packages/db run db:generate",
+    "db:migrate": "npm --prefix packages/db run db:migrate",
+    "db:studio": "npm --prefix packages/db run db:studio"
+  }
+}
+

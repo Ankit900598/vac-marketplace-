@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  VA
+  ADMIN
+}
+
+enum VaApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum JobStatus {
+  OPEN
+  HIRED
+  CLOSED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+
+  clientProfile ClientProfile?
+  vaProfile     VaProfile?
+
+  refreshTokens RefreshToken[]
+
+  reviewedApplications VaApplication[] @relation("ReviewedApplications")
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  revokedAt  DateTime?
+
+  tokenHash  String   @unique
+  expiresAt  DateTime
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ClientProfile {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  company   String?
+  fullName  String?
+
+  jobs      Job[]
+}
+
+model VaProfile {
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  userId         String               @unique
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  application    VaApplication?
+  skills         VaSkill[]
+  portfolioLinks VaPortfolioLink[]
+
+  hires          Hire[]               @relation("VaHires")
+  jobMatches     JobMatch[]
+}
+
+model VaApplication {
+  id           String               @id @default(cuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  vaProfileId  String               @unique
+  vaProfile    VaProfile            @relation(fields: [vaProfileId], references: [id], onDelete: Cascade)
+
+  status       VaApplicationStatus  @default(PENDING)
+  experience   String
+  testScore    Int
+
+  reviewedById String?
+  reviewedBy   User?                @relation("ReviewedApplications", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  reviewNote   String?
+
+  testSubmissions VaTestSubmission[]
+
+  @@index([status])
+}
+
+model VaTestSubmission {
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+
+  applicationId  String
+  application    VaApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  answersJson    Json
+  score          Int?
+
+  @@index([applicationId])
+}
+
+model VaSkill {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+
+  vaProfileId String
+  vaProfile   VaProfile @relation(fields: [vaProfileId], references: [id], onDelete: Cascade)
+
+  name        String
+
+  @@unique([vaProfileId, name])
+  @@index([name])
+}
+
+model VaPortfolioLink {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+
+  vaProfileId String
+  vaProfile   VaProfile @relation(fields: [vaProfileId], references: [id], onDelete: Cascade)
+
+  label       String?
+  url         String
+
+  @@index([vaProfileId])
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  clientId    String
+  client      ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  skills      JobSkill[]
+  status      JobStatus @default(OPEN)
+
+  matches     JobMatch[]
+  hire        Hire?
+
+  @@index([clientId])
+  @@index([status])
+}
+
+model JobSkill {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  name      String
+
+  @@unique([jobId, name])
+  @@index([name])
+}
+
+model JobMatch {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+
+  jobId       String
+  job         Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  vaProfileId String
+  vaProfile   VaProfile @relation(fields: [vaProfileId], references: [id], onDelete: Cascade)
+
+  score       Int
+
+  @@unique([jobId, vaProfileId])
+  @@index([jobId])
+  @@index([vaProfileId])
+}
+
+model Hire {
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+
+  jobId       String        @unique
+  job         Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  vaProfileId String
+  vaProfile   VaProfile     @relation("VaHires", fields: [vaProfileId], references: [id], onDelete: Cascade)
+
+  hiredAt     DateTime      @default(now())
+
+  @@index([vaProfileId])
+}
+

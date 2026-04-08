@@ -1,0 +1,132 @@
+:root{
+  --bg:#0b0d12;
+  --panel:#111522;
+  --muted:#a6b0c3;
+  --text:#e9eefb;
+  --brand:#7c5cff;
+  --brand2:#22d3ee;
+  --border:rgba(255,255,255,0.08);
+  --danger:#ff4d6d;
+  --ok:#29d17d;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  background: radial-gradient(1200px 800px at 15% 15%, rgba(124,92,255,0.18), transparent 60%),
+              radial-gradient(900px 600px at 85% 20%, rgba(41,209,125,0.10), transparent 55%),
+              var(--bg);
+  color:var(--text);
+}
+
+a{color:inherit;text-decoration:none}
+
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.grid{display:grid;gap:16px}
+.grid2{grid-template-columns:1fr 1fr}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+}
+.card.hover:hover{
+  border-color:rgba(124,92,255,0.35);
+  transform: translateY(-1px);
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+.title{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin:0 0 8px}
+.heroTitle{font-size:48px;font-weight:900;letter-spacing:-0.04em;margin:0 0 10px;line-height:1.03}
+.gradientText{
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  -webkit-background-clip: text;
+  background-clip:text;
+  color: transparent;
+}
+.subtitle{color:var(--muted);margin:0 0 16px;line-height:1.4}
+.heroSub{font-size:16px;max-width:680px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.spacer{flex:1}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(124,92,255,0.16);
+  border:1px solid rgba(124,92,255,0.35);
+  color:var(--text);
+  padding:10px 12px;border-radius:12px;
+  font-weight:600;cursor:pointer;
+}
+.btn:hover{background:rgba(124,92,255,0.22)}
+.btn.primary{
+  background: linear-gradient(90deg, rgba(124,92,255,0.80), rgba(34,211,238,0.55));
+  border:1px solid rgba(124,92,255,0.55);
+}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.secondary{
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+}
+.btn.danger{
+  background:rgba(255,77,109,0.12);
+  border:1px solid rgba(255,77,109,0.35);
+}
+
+.input, .textarea{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 12px;border-radius:12px;
+  outline:none;
+}
+.textarea{min-height:110px;resize:vertical}
+.label{font-size:12px;color:var(--muted);margin:12px 0 6px}
+.pill{
+  display:inline-flex;align-items:center;
+  padding:6px 10px;border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--muted);
+  font-size:12px;
+}
+.pill.ok{color:var(--ok);border-color:rgba(41,209,125,0.25);background:rgba(41,209,125,0.08)}
+.pill.pending{color:#ffd166;border-color:rgba(255,209,102,0.25);background:rgba(255,209,102,0.08)}
+.pill.bad{color:var(--danger);border-color:rgba(255,77,109,0.25);background:rgba(255,77,109,0.08)}
+
+.nav{
+  position:sticky;top:0;z-index:10;
+  backdrop-filter: blur(10px);
+  background:rgba(11,13,18,0.55);
+  border-bottom:1px solid var(--border);
+}
+.navInner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:12px}
+.brand{font-weight:800;letter-spacing:-0.03em}
+.muted{color:var(--muted)}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
+
+.kpiGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:900px){.kpiGrid{grid-template-columns:1fr}}
+.kpi{padding:14px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,0.03)}
+.kpiNum{font-size:20px;font-weight:900;letter-spacing:-0.02em}
+.kpiLbl{color:var(--muted);font-size:12px;margin-top:4px}
+
+.featureGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:900px){.featureGrid{grid-template-columns:1fr}}
+.featureTitle{font-weight:800;margin:0 0 6px}
+.featureText{color:var(--muted);margin:0;line-height:1.45}
+
+.divider{height:1px;background:var(--border);margin:12px 0}
+.chipRow{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  color:var(--text);
+}
+

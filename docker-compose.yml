@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: va_user
+      POSTGRES_PASSWORD: va_pass
+      POSTGRES_DB: va_marketplace
+    ports:
+      - "5433:5432"
+    volumes:
+      - va_marketplace_pg:/var/lib/postgresql/data
+
+volumes:
+  va_marketplace_pg:
+
